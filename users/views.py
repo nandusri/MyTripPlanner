@@ -5,12 +5,12 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import status
 from django.contrib.auth import authenticate,login,logout
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserDetailSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = User.objects.filter(pk = self.request.user.id)
@@ -44,7 +44,7 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=False, methods=['post'])
     def logout(self, request):
         logout(request)
         return Response({"logged_out": True})

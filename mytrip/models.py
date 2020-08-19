@@ -2,8 +2,6 @@ from django.db import models
 from model_utils.models import TimeStampedModel
 import users.models
 
-# Create your models here.
-
 class City(TimeStampedModel):
     city_name = models.CharField(max_length = 300)
     # location = models.MultiPointField()
@@ -23,4 +21,4 @@ class Photo(TimeStampedModel):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.location
+        return str(self.trip)
