@@ -7,7 +7,7 @@ Django Application to plan trips
   ```
     git clone https://github.com/nandusri/MyTripPlanner.git
   ```
-2.**Install Python version 3.8 or greater**
+2.**Install Python version 3.6 or greater**
   ```
     https://www.python.org/downloads/
   ```
