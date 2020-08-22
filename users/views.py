@@ -7,6 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate,login,logout
+from rest_framework.authtoken.models import Token
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -21,7 +22,10 @@ class UserViewSet(viewsets.ModelViewSet):
         data = request.data
         user_serializer = UserSerializer(data=data)
         user_serializer.is_valid(raise_exception=True)
-        user_serializer.save()
+        user = user_serializer.save()
+        token = Token.objects.create(user=user)
+        data['token'] = token.key
+        print(user, data['token'])
         return Response({'data':data})
     
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
@@ -35,9 +39,13 @@ class UserViewSet(viewsets.ModelViewSet):
         if user is not None:
             if user.is_active:
                 login(request, user)
+                token = Token.objects.filter(user=user).first()
+                if not token:
+                    token = Token.objects.create(user=user)
                 return Response({
                     "is_authenticated": True,
-                    "user": UserDetailSerializer(request.user).data
+                    "user": UserDetailSerializer(request.user).data,
+                    "token": token.key
                 })
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
