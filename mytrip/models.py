@@ -11,10 +11,12 @@ class City(TimeStampedModel):
 
 class Trip(TimeStampedModel):
     user = models.ForeignKey(users.models.User, on_delete=models.CASCADE)
-    city = models.ManyToManyField(City)
+    trip_name = models.CharField(max_length=300)
+    source_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name = "source_city")
+    destination_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name = "destination_city")
 
     def __str__(self):
-        return self.user.username
+        return self.trip_name
 
 class Photo(TimeStampedModel):
     city_photo = models.ImageField(upload_to='trip')
